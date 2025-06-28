@@ -1,0 +1,96 @@
+#total 3 types of coffe
+#1)expresso-$1.50{water-50ml,coffe-18g,milk-0ml}
+#2)latte-$2.50{water-200ml,coffe-24g,milk-150ml}
+#3)cappuccino-$3.0{water-250ml,coffe-24g,milk-100ml}
+
+#in coffe machine
+#program requirements
+'''1)print report
+2)check resource sufficient
+3)process coins
+4)if check transaction succesful
+        make coffe
+    else
+        n'''
+#quarter=0.25,dimes=0.10,nickels=0.01,pennies=0.01
+
+
+
+items={
+    "expresso":{"water":150,"coffee":18,"milk":0},
+        "latte":{ "water":200,"coffee":24,"milk":150},
+        "cappuccino":{ "water":250,"coffee":24,"milk":100}
+    
+}
+resources={"water":3000,"coffee":1000,"milk":3000,"money":0.0}
+cost={"expresso":1.50,"latte":2.50,"cappiccino":3.0}
+def available(item):
+    
+    if(items[item]["water"]<=resources["water"] and items[item]["coffee"]<=resources["coffee"] and items[item]["milk"]<=resources["milk"]):
+        return True
+    else:
+        return False
+def calculate(cash_input,item):
+    total=cash_input["quarters"]*0.25+cash_input["dimes"]*0.10+cash_input["nickels"]*0.05+cash_input["pennies"]*0.01
+    if total==cost[item]:
+        resources["water"]=resources["water"]-items[item]["water"]
+        resources["coffee"]=resources["coffee"]-items[item]["coffee"]
+        resources["milk"]=resources["milk"]-items[item]["milk"]
+        resources["money"]+=cost[item]
+        return f"Here is your {item} enjoy"
+    elif total>cost[item]:
+        resources["water"]=resources["water"]-items[item]["water"]
+        resources["coffee"]=resources["coffee"]-items[item]["coffee"]
+        resources["milk"]=resources["milk"]-items[item]["milk"]
+        resources["money"]+=cost[item]
+        return f"Here is your ${round(total-cost[item],2)} change.\nHere is your {item} enjoy."
+    else:
+        return "insufficient money!.."
+print("welcome to the coffee machine....")
+decision=True
+while decision:
+    print("this are the available resources")
+    for i in resources:
+        if i=="coffee":
+            print(f"{i} : {resources[i]}g")
+        elif i=="money":
+            print(f"{i} : ${resources[i]}")
+        else:
+            print(f"{i} : {resources[i]}ml")
+            
+            
+        
+        
+    item=input("enter the item which you want 'expresso' or 'latte' or 'cappuccino'?:").lower()
+    avail=""
+    if item=="expresso" or item=="latte" or item=="cappuccino":
+        avail=available(item)
+    else:
+        print("you entered incorrect item try again.")
+        continue
+        
+    if(avail):
+        print("this item available:")
+        cash_input={"quarters":0,"dimes":0,"nickels":0,"pennies":0}
+        print("please insert cash.")
+        for i in cash_input:
+            print(f"how many {i} ? $",end="")
+            cash_input[i]=int(input())
+        cash_output=calculate(cash_input,item)
+        print(cash_output)
+        more=input("would you like one more? type 'yes' or 'no'.").lower()
+        if(more=='yes'):
+            pass
+        else:
+            decision=False
+    else:
+        print("this item not available try with another item...")
+        decision=False
+print(f"Total money in machine is {resources['money']}" )
+        
+        
+        
+    
+        
+    
+    
